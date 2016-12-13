@@ -52,7 +52,7 @@ appClient.on("deviceEvent", (e) => {console.log(e); temp.push(e)});*/
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
-	res.send(temp);
+	res.send('Hello, to virlab backend, duude');
 	res.end();
 	/*var data = LabModel.find((err, labs) => {
 		if (!err) {
