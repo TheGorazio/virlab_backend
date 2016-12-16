@@ -19,8 +19,10 @@ var LabModel = mongoose.model('labs', LabSchema);
 db.on('error', (err) => {
 	console.log(`Connection error ${err}`);
 });
-/*
+
 var Client = require("ibmiotf");
+
+/*
 var config = {
     "org" : "274qto",
     "id" : "glebTest",
@@ -34,6 +36,7 @@ var deviceClient = new Client.IotfDevice(config);
 deviceClient.connect();
 deviceClient.on('connect', () => {});
 deviceClient.on('error', (err) => {console.error(err)});
+*/
 
 var appClientConfig = {
     "org" : "274qto",
@@ -43,26 +46,28 @@ var appClientConfig = {
     "auth-token" : "AVQG9j9KLtUHG0qZCE"
 }
 var appClient = new Client.IotfApplication(appClientConfig);
-var temp = [];
+var cloudData = [];
 
 appClient.connect();
 appClient.on("connect", () => {appClient.subscribeToDeviceEvents();});
 appClient.on("error", (err) => {console.error(err);});
-appClient.on("deviceEvent", (e) => {console.log(e); temp.push(e)});*/
+appClient.on("deviceEvent", (e) => {console.log(e); temp.push(e)});
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
 	res.send('Hello, to virlab backend, duude');
-	/*var data = LabModel.find((err, labs) => {
-		if (!err) {
-			res.send(labs);
-			res.end();
-		} else {
-			res.statusCode = 500;
-			res.send('Error in db');
-			res.end();
-		}
-	});*/
+	res.end();
+});
+
+router.post('/check', (req, res, next) => {
+	console.log(req.body);
+	
+	if (req.body) {
+		checkStand(req.body);
+	}
+
+	res.send(req.body);
+	res.end();
 });
 
 router.post('/save', (req, res, next) => {
@@ -107,5 +112,20 @@ router.post('/load', (req, res, next) => {
 	}
 
 });
+
+/*
+	array of wires - stand['data[]']
+	wire - JSON.parse(stand['data[]'][i])
+
+ */
+
+function checkStand(stand) {
+
+
+	console.log(stand['data[]'].length);
+	for (var el of stand['data[]']) {
+		console.log(JSON.parse(el)['Side1']);
+	}
+}
 
 module.exports = router;
